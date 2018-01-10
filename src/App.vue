@@ -10,13 +10,18 @@
 
 <script>
 import Vue from "vue";
-import Sheet from "./Sheet.vue";
+import Vuex from "vuex";
 import VueRouter from "vue-router";
+import Sheet from "./Sheet.vue";
+import store from "./store";
 
 Vue.use(VueRouter);
 
 var Home = new Vue({
-  template:"<h1>Home</h1>"
+  name: "home",
+  render: function(h) {
+    return h("h1","Home")
+  }
 });
 
 var router = new VueRouter({
@@ -29,9 +34,7 @@ var router = new VueRouter({
 export default {
   name: 'app',
   router,
-  components: {
-    sheet: Sheet
-  }
+  store
 }
 </script>
 

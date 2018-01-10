@@ -32,13 +32,13 @@
 </template>
 
 <script>
-
 export default {
-  data: function()  {
-      var rowCount=10,columnCount=26;
-      var gridFormulas = {B3:"123", C5:"'Zorro"};
-      return {
-          rowCount,columnCount,gridFormulas, currentCellRange: {row:1,column:1}
+  props: [ "sheetId" ],
+  data: function() {
+      if (this.sheetId) {
+          return this.$store.getters.sheetById(this.sheetId);
+      } else {
+          return this.$store.getters.newSheet();
       }
   },
   methods: {
