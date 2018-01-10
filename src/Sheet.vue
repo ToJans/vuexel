@@ -2,11 +2,20 @@
     <table>
         <thead>
             <tr>
-                <th v-for="ic in columnCount" :key="ic">
+                <th class="column-header row-header">&nbsp;</th>
+                <th v-for="ic in columnCount" :key="'c'+ic" class="row-header">
                     {{columnLabel(ic)}}
                 </th>
             </tr>
         </thead>
+        <tbody>
+            <tr v-for="rc in rowCount" :key="'r'+rc">
+                <th class="column-header">
+                    {{rowLabel(rc)}}
+                </th>
+
+            </tr>
+        </tbody>
     </table>
   
 </template>
@@ -53,9 +62,17 @@ export default {
 
 <style scoped>
     th, td {
-        min-width: 8em;
         border: 1px solid darkgray;
     }
+
+    .row-header {
+        min-width: 8em;
+    }
+
+    .column-header {
+        min-width: 2em;
+    }
+
 </style>
 
 
