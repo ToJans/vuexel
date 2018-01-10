@@ -13,7 +13,9 @@
                 <th class="column-header">
                     {{rowLabel(rc)}}
                 </th>
-
+                <td v-for="ic in columnCount" :key="'c'+ic" class="cell">
+                    {{cellDisplayValue(rc,ic)}}
+                </td>
             </tr>
         </tbody>
     </table>
@@ -25,7 +27,7 @@ export default {
   data: function()
   {
       var rowCount=10,columnCount=26;
-      var gridValues = {};
+      var gridValues = {B3:123, C5:"Zorro"};
       return {
           rowCount,columnCount,gridValues
       }
@@ -46,7 +48,7 @@ export default {
           return label;
       },
       cellLabel: function(rowIndex,columnIndex) {
-          return columnLabel(columnIndex)+rowLabel(rowIndex);
+          return this.columnLabel(columnIndex)+this.rowLabel(rowIndex);
       },
       cellValue: function(rowIndex,columnIndex){
           const label = this.cellLabel(rowIndex,columnIndex);
@@ -54,6 +56,14 @@ export default {
               return this.gridValues[label];
           } else {
               return null;
+          }
+      },
+      cellDisplayValue: function (rowIndex, columnIndex) {
+          const val = this.cellValue(rowIndex,columnIndex);
+          if (val === null) {
+              return ""
+          } else {
+              return val;
           }
       }
   }
