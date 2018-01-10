@@ -21,8 +21,9 @@
                 </th>
                 <td v-for="ic in columnCount" :key="'c'+ic+'r'+ir" class="cell" 
                     @click="setCurrentCell(ir,ic)" 
-                    :class="{'selected-cell':currentCell.row===ir && currentCell.column === ic}">
-                    {{cellDisplayValue(ir,ic)}}
+                    :class="{'selected-cell':currentCell.row===ir && currentCell.column === ic}"
+                    v-html="cellDisplayValue(ir,ic)">
+                    
                 </td>
             </tr>
         </tbody>
@@ -97,7 +98,9 @@ export default {
       },
       gridValues: function () {
         let cached  = {};
-        let scope = {};
+        let scope = {
+            img: (url) => `<img src="${url}"/>`
+        };
         var labels = Object.keys(this.gridFormulas);
         for (const l in this.gridFormulas) {
             const label = l;
