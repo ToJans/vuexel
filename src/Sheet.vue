@@ -2,6 +2,12 @@
     <table>
         <thead>
             <tr>
+                <td>{{currentCell.label}}</td>
+                <td :colspan="columnCount-1" class="formula-editor">
+                    <input v-model="currentCellValue" />
+                </td>
+            </tr>
+            <tr>
                 <th class="column-header row-header">&nbsp;</th>
                 <th v-for="ic in columnCount" :key="'c'+ic" class="row-header">
                     {{columnLabel(ic)}}
@@ -9,12 +15,12 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="rc in rowCount" :key="'r'+rc">
+            <tr v-for="ir in rowCount" :key="'r'+ir">
                 <th class="column-header">
-                    {{rowLabel(rc)}}
+                    {{rowLabel(ir)}}
                 </th>
-                <td v-for="ic in columnCount" :key="'c'+ic" class="cell">
-                    {{cellDisplayValue(rc,ic)}}
+                <td v-for="ic in columnCount" :key="'c'+ic+'r'+ir" class="cell" @click="currentCellRange={row:ir,column:ic}">
+                    {{cellDisplayValue(ir,ic)}}
                 </td>
             </tr>
         </tbody>
@@ -29,7 +35,7 @@ export default {
       var rowCount=10,columnCount=26;
       var gridValues = {B3:123, C5:"Zorro"};
       return {
-          rowCount,columnCount,gridValues
+          rowCount,columnCount,gridValues, currentCellRange: {row:1,column:1}
       }
   },
   methods: {
@@ -66,12 +72,35 @@ export default {
               return val;
           }
       }
+  }, computed: {
+      currentCell: function () {
+          if (!this.currentCellRange) {
+              return {
+                  row: -1, column: -1, label: "", value: null
+              }
+          } 
+          let row = this.currentCellRange.row;
+          let column = this.currentCellRange.column;
+          let label = this.cellLabel(row,column);
+          let value = this.cellValue(row,column);
+          return {
+            row,column,label,value
+          }
+      },
+      currentCellValue: {
+        get:function () {
+            return this.currentCell.value;
+        },
+        set: function (value) {
+            this.$set(this.gridValues, this.currentCell.label,value);
+        }
+      }
   }
 }
 </script>
 
 <style scoped>
-    th, td {
+    .column-header, .row-header, .cell {
         border: 1px solid darkgray;
     }
 
@@ -81,6 +110,10 @@ export default {
 
     .column-header {
         min-width: 2em;
+    }
+
+    .formula-editor input {
+        width:100%;
     }
 
 </style>
