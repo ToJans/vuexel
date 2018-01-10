@@ -30,6 +30,11 @@ export default new Vuex.Store({
         },
         sheetById: (state) => ( uuid) => {
             return state.sheets[uuid];
+        },
+        sheetList: (state) => {
+            return Object.keys(state.sheets).map(uuid=> {
+                return {uuid, name: state.sheets[uuid].name};
+            });
         }
     }
 })

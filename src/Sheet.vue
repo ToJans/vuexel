@@ -42,10 +42,11 @@
 
 <script>
 export default {
-  props: [ "sheetId" ],
+  props: [ "uuid" ],
   data: function() {
-      if (this.sheetId) {
-          return this.$store.getters.sheetById(this.sheetId);
+      const uuid=this.$route.params.uuid;
+      if (uuid && uuid!=="new") {
+          return this.$store.getters.sheetById(uuid);
       } else {
           return this.$store.getters.newSheet();
       }

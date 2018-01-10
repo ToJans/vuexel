@@ -13,21 +13,16 @@ import Vue from "vue";
 import Vuex from "vuex";
 import VueRouter from "vue-router";
 import Sheet from "./Sheet.vue";
+import Home from "./Home.vue"
 import store from "./store";
 
 Vue.use(VueRouter);
 
-var Home = new Vue({
-  name: "home",
-  render: function(h) {
-    return h("h1","Home")
-  }
-});
-
 var router = new VueRouter({
   routes: [
     {path:"/home", component: Home },
-    {path:"/sheets/new", component: Sheet}
+    {path:"/sheets/new", component: Sheet},
+    {path: "/sheets/:uuid",component: Sheet}
   ]
 })
 
