@@ -1,12 +1,18 @@
 <template>
   <div id="app">
     <h1>Vuexel</h1>
+    <sheet></sheet>
   </div>
 </template>
 
 <script>
+import Sheet from "./Sheet.vue";
+
 export default {
-  name: 'app'
+  name: 'app',
+  components: {
+    sheet: Sheet
+  }
 }
 </script>
 
