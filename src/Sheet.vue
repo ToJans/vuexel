@@ -2,6 +2,15 @@
     <table>
         <thead>
             <tr>
+                <td colspan="2">
+                    Name
+                </td>
+                <td :colspan="3">
+                    <input v-model="name" type="text" placeholder="UnnamedFile" style="width:100%"/> 
+                </td>
+                <td><input type="button" @click.prevent="save" value="save"></td>
+            </tr>
+            <tr>
                 <td>{{currentCell.label}}</td>
                 <td :colspan="columnCount-1" class="formula-editor">
                     <input ref="formula" v-model="gridFormulas[currentCell.label]" />
@@ -78,6 +87,16 @@ export default {
       setCurrentCell: function(row,column) {
           this.currentCellRange = {row,column};
           this.$refs.formula.focus();
+      },
+      save: function () {
+          this.$store.commit("saveSheet",{
+              name: this.name,
+              gridFormulas:this.gridFormulas,
+              rowCount:this.rowCount,
+              columnCount:this.columnCount,
+              uuid: this.uuid,
+              currentCellRange: this.currentCellRange
+          });
       }
   }, computed: {
       currentCell:  function () {

@@ -13,12 +13,12 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: () => {
         return {
-            sheets: []
+            sheets: {}
         }
     },
     mutations: {
         saveSheet: (state,{name,gridFormulas,rowCount,columnCount,uuid,currentCellRange}) => {
-            state.sheets[uuid] = {name,gridFormulas,rowCount,columnCount,uuid,currentCellRange};
+            Vue.set(state.sheets,uuid,{name,gridFormulas,rowCount,columnCount,uuid,currentCellRange});
         },
         deleteSheet: (state, uuid) => {
             delete state.sheets[uuid];
