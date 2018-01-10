@@ -52,7 +52,10 @@ export default {
 </script>
 
 <style scoped>
-
+    th, td {
+        min-width: 8em;
+        border: 1px solid darkgray;
+    }
 </style>
 
 
