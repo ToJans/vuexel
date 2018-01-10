@@ -19,7 +19,9 @@
                 <th class="column-header">
                     {{rowLabel(ir)}}
                 </th>
-                <td v-for="ic in columnCount" :key="'c'+ic+'r'+ir" class="cell" @click="currentCellRange={row:ir,column:ic}">
+                <td v-for="ic in columnCount" :key="'c'+ic+'r'+ir" class="cell" 
+                    @click="currentCellRange={row:ir,column:ic}" 
+                    :class="{'selected-cell':currentCell.row===ir && currentCell.column === ic}">
                     {{cellDisplayValue(ir,ic)}}
                 </td>
             </tr>
@@ -74,17 +76,11 @@ export default {
       }
   }, computed: {
       currentCell: function () {
-          if (!this.currentCellRange) {
-              return {
-                  row: -1, column: -1, label: "", value: null
-              }
-          } 
           let row = this.currentCellRange.row;
           let column = this.currentCellRange.column;
           let label = this.cellLabel(row,column);
-          let value = this.cellValue(row,column);
           return {
-            row,column,label,value
+            row,column,label
           }
       },
       currentCellValue: {
@@ -114,6 +110,14 @@ export default {
 
     .formula-editor input {
         width:100%;
+    }
+
+    .selected-cell {
+        border: 2px blue solid;
+    }
+
+    table {
+        border-spacing: 0px;
     }
 
 </style>
