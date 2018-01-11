@@ -13,7 +13,24 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: () => {
         return {
-            sheets: {}
+            sheets: {
+                examplesheet: {
+                    "name":"Example sheet",
+                    "gridFormulas":{
+                        "E6":"=2+1",
+                        "A6":"=function(radians){ return radians*180/Math.PI;}",
+                        "B5":"Radians","C5":"Degrees",
+                        "B6":"=Math.PI","C6":"=A6(B6)",
+                        "A8":"Image url",
+                        "B8":"https://vuejs.org//images/logo.png",
+                        "A9":"Image",
+                        "B9":"=`<img src=\"${B8}\"/>`",
+                        "A4":"You can define functions",
+                        "C7":"^This conversion uses the function defined in A6"
+                    },
+                    "rowCount":10,"columnCount":10,
+                    "uuid":"examplesheet","currentCellRange":{"row":9,"column":2}}
+            }
         }
     },
     mutations: {
