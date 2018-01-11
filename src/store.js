@@ -40,8 +40,8 @@ export default new Vuex.Store({
             Vue.set(state.sheets,uuid,{name,gridFormulas,rowCount,columnCount,uuid,currentCellRange});
             localStorage.setItem(sheetsKey,JSON.stringify(state.sheets));
         },
-        deleteSheet: (state, uuid) => {
-            delete state.sheets[uuid];
+        deleteSheet: (state, {uuid}) => {
+            Vue.delete(state.sheets,uuid);
             localStorage.setItem(sheetsKey,JSON.stringify(state.sheets));
         }
     }, 
