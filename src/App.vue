@@ -1,7 +1,7 @@
 <template>
   <div id="app">
       <h1>
-        <router-link to="/home" >Vuexel</router-link>
+        <router-link to="/" >Vuexel</router-link>
         <span class="subtitle">A toy spreadsheet implemented in Vue.js</span>
       </h1>
     <p>This was hacked together in a day for 
@@ -32,7 +32,7 @@ Vue.use(VueRouter);
 
 var router = new VueRouter({
   routes: [
-    {path:"/home", component: Home },
+    {path:"/", component: Home },
     {path:"/sheets/new", component: Sheet},
     {path: "/sheets/:uuid",component: Sheet}
   ]
