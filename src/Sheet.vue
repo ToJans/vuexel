@@ -42,7 +42,6 @@
 
 <script>
 export default {
-  props: [ "uuid" ],
   data: function() {
       const uuid=this.$route.params.uuid;
       if (uuid && uuid!=="new") {
@@ -129,16 +128,24 @@ export default {
                 get: function(){
                     let retval = "#ERROR";
                     try {
+                        // cached
                         if (cached.hasOwnProperty(label)) {
                             retval = cached[label];
+                        // empty
                         } else if (fmla === null) {
                             retval = null;
+                        // literal
+                        } else if (fmla.match(/^[A-Za-z_]/)) {
+                            retval = fmla;
+                        // forced literal
                         } else if (fmla[0] === "'") {
                             retval = fmla.substring(1);
+                        // formula
                         } else if (fmla[0] === "=") {
                             const fnText = `let res;with(__scope){ res=(${fmla.substring(1)});}; return res;`
                             var fn = new Function("__scope",fnText);
                             retval = fn(scope);
+                        // assume number
                         } else {
                             retval = parseFloat(fmla);
                         }
