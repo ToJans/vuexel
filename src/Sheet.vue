@@ -5,20 +5,19 @@
                 <td colspan="2">
                     Name
                 </td>
-                <td :colspan="3">
+                <td :colspan="2">
                     <input v-model="name" type="text" placeholder="Unnamed sheet - specify a name" style="width:100%"/> 
-                </td>
                 <td><input type="button" @click.prevent="save" :disabled="!hasUnsavedChanges || !name" value="save"></td>
-                <td v-if="hasUnsavedChanges" colspan="3">THIS DOCUMENT HAS UNSAVED CHANGES</td>
                 <td>Rows</td>
                 <td><input type="number" v-model.number="rowCount"></td>
                 <td>Columns</td>
                 <td><input type="number" v-model.number="columnCount"></td>
+                <td v-if="hasUnsavedChanges" colspan="3">THIS DOCUMENT HAS UNSAVED CHANGES</td>
             </tr>
             <tr>
                 <td>{{currentCell.label}}</td>
                 <td :colspan="columnCount" class="formula-editor">
-                    <input ref="formula" v-model="currentCellValue" />
+                    <input ref="formula" v-model="gridFormulas[currentCell.label]" @change="hasUnsavedChanges=true" />
                 </td>
             </tr>
             <tr>
@@ -35,7 +34,7 @@
                 </th>
                 <td v-for="ic in columnCount" :key="'c'+ic+'r'+ir" class="cell" 
                     @click="setCurrentCell(ir,ic)" 
-                    :class="{ 'selected-cell': currentCell.row===ir && currentCell.column === ic, error: (cellValue(ir,ic)||'').match(/^#ERROR/)}"
+                    :class="{ 'selected-cell': currentCell.row===ir && currentCell.column === ic, error: (cellValue(ir,ic)+'').match(/^#ERROR/)}"
                     v-html="cellDisplayValue(ir,ic)">
                     
                 </td>
@@ -149,22 +148,19 @@ export default {
                         if (cached.hasOwnProperty(label)) {
                             retval = cached[label];
                         // empty
-                        } else if (fmla === null) {
+                        } else if (fmla === null || fmla==="") {
                             retval = null;
-                        // literal
-                        } else if (fmla.match(/^[A-Za-z_]/)) {
-                            retval = fmla;
-                        // forced literal
-                        } else if (fmla[0] === "'") {
-                            retval = fmla.substring(1);
                         // formula
                         } else if (fmla[0] === "=") {
                             const fnText = `let res;with(__scope){ res=(${fmla.substring(1)});}; return res;`
                             var fn = new Function("__scope",fnText);
                             retval = fn(scope);
-                        // assume number
+                        // assume number, else string
                         } else {
                             retval = parseFloat(fmla);
+                            if (isNaN(retval)) {
+                                retval = fmla;
+                            }
                         }
                     } catch (e) {
                         retval="#ERROR "+e;
