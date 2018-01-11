@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <h1>Vuexel</h1>
-    <router-link to="/home">All sheets</router-link>
-    <router-link to="/sheets/new">New sheet</router-link>
+    <router-link to="/home"><h1>Vuexel</h1></router-link>
+    <div class="subtitle">A toy spreadsheet implemented in Vue.js</div>
+    <div class="disclaimer">Uses Javascript function invocation, so not safe!</div>
     <router-view>
     </router-view>
   </div>
@@ -33,11 +33,25 @@ export default {
 }
 </script>
 
-<style>
+<style >
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.subtitle {
+  font-size: larger;
+  padding-bottom: 1em;
+}
+
+.disclaimer {
+  background-color:red;
+  color:white;
+  font-weight: bold;
+  display: block;
+  position: absolute;
+  top:0px;
 }
 
 </style>

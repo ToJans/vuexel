@@ -1,5 +1,8 @@
 <template>
     <ul>
+        <li>
+            <router-link to="/sheets/new">Add a new sheet</router-link>
+        </li>
         <li v-for="sheet in sheetList" :key="sheet.link">
             <router-link :to="sheet.link">{{sheet.name}}</router-link>
         </li>
