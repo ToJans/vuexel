@@ -10,6 +10,10 @@
                 </td>
                 <td><input type="button" @click.prevent="save" :disabled="!hasUnsavedChanges || !name" value="save"></td>
                 <td v-if="hasUnsavedChanges" colspan="3">THIS DOCUMENT HAS UNSAVED CHANGES</td>
+                <td>Rows</td>
+                <td><input type="number" v-model.number="rowCount"></td>
+                <td>Columns</td>
+                <td><input type="number" v-model.number="columnCount"></td>
             </tr>
             <tr>
                 <td>{{currentCell.label}}</td>
@@ -19,13 +23,13 @@
             </tr>
             <tr>
                 <th class="column-header row-header">&nbsp;</th>
-                <th v-for="ic in columnCount" :key="'c'+ic" class="row-header">
+                <th v-for="ic in columnCount" :key="'ch'+ic" class="row-header">
                     {{columnLabel(ic)}}
                 </th>
             </tr>
         </thead>
         <tbody>
-            <tr v-for="ir in rowCount" :key="'r'+ir">
+            <tr v-for="ir in rowCount" :key="'rh'+ir">
                 <th class="column-header">
                     {{rowLabel(ir)}}
                 </th>
@@ -62,10 +66,12 @@ export default {
       },
       columnLabel: function(columnIndex){
           let label="";
-          columnIndex--;
           const availableLabels="ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
           do {
               let i = columnIndex % availableLabels.length;
+              if (columnIndex<availableLabels.length) {
+                  i--;
+              }
               label = availableLabels[i]+label;
               columnIndex = Math.floor(columnIndex/availableLabels.length);
           } while (columnIndex > 0)
@@ -208,6 +214,10 @@ export default {
     .cell.error {
         font-weight: bolder;
         color: darkred;
+    }
+
+    input[type=number] {
+        width:9em;
     }
 
 </style>
