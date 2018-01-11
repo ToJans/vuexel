@@ -10,35 +10,39 @@ function uuidv4() {
   
 Vue.use(Vuex);
 
+const sheetsKey = "vuexel-sheets";
+
 export default new Vuex.Store({
     state: () => {
-        return {
-            sheets: {
-                examplesheet: {
-                    "name":"Example sheet",
-                    "gridFormulas":{
-                        "E6":"=2+1",
-                        "A6":"=function(radians){ return radians*180/Math.PI;}",
-                        "B5":"Radians","C5":"Degrees",
-                        "B6":"=Math.PI","C6":"=A6(B6)",
-                        "A8":"Image url",
-                        "B8":"https://vuejs.org//images/logo.png",
-                        "A9":"Image",
-                        "B9":"=`<img src=\"${B8}\"/>`",
-                        "A4":"You can define functions",
-                        "C7":"^This conversion uses the function defined in A6"
-                    },
-                    "rowCount":10,"columnCount":10,
-                    "uuid":"examplesheet","currentCellRange":{"row":9,"column":2}}
-            }
-        }
+        var sheets = JSON.parse(localStorage.getItem(sheetsKey)||"{}");
+
+        sheets.examplesheet= {
+            "name":"Example sheet",
+            "gridFormulas":{
+                "E6":"=2+1",
+                "A6":"=function(radians){ return radians*180/Math.PI;}",
+                "B5":"Radians","C5":"Degrees",
+                "B6":"=Math.PI","C6":"=A6(B6)",
+                "A8":"Image url",
+                "B8":"https://vuejs.org//images/logo.png",
+                "A9":"Image",
+                "B9":"=`<img src=\"${B8}\"/>`",
+                "A5":"You can define functions",
+                "C7":"^This conversion uses the function defined in A6"
+            },
+            "rowCount":10,"columnCount":10,
+            "uuid":"examplesheet","currentCellRange":{"row":9,"column":2}
+        };
+        return {sheets};
     },
     mutations: {
         saveSheet: (state,{name,gridFormulas,rowCount,columnCount,uuid,currentCellRange}) => {
             Vue.set(state.sheets,uuid,{name,gridFormulas,rowCount,columnCount,uuid,currentCellRange});
+            localStorage.setItem(sheetsKey,JSON.stringify(state.sheets));
         },
         deleteSheet: (state, uuid) => {
             delete state.sheets[uuid];
+            localStorage.setItem(sheetsKey,JSON.stringify(state.sheets));
         }
     }, 
     getters: {
