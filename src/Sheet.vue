@@ -6,14 +6,15 @@
                     Name
                 </td>
                 <td :colspan="3">
-                    <input v-model="name" type="text" placeholder="UnnamedFile" style="width:100%"/> 
+                    <input v-model="name" type="text" placeholder="Unnamed sheet - specify a name" style="width:100%"/> 
                 </td>
-                <td><input type="button" @click.prevent="save" value="save"></td>
+                <td><input type="button" @click.prevent="save" :disabled="!hasUnsavedChanges || !name" value="save"></td>
+                <td v-if="hasUnsavedChanges" colspan="3">THIS DOCUMENT HAS UNSAVED CHANGES</td>
             </tr>
             <tr>
                 <td>{{currentCell.label}}</td>
-                <td :colspan="columnCount-1" class="formula-editor">
-                    <input ref="formula" v-model="gridFormulas[currentCell.label]" />
+                <td :colspan="columnCount" class="formula-editor">
+                    <input ref="formula" v-model="currentCellValue" />
                 </td>
             </tr>
             <tr>
@@ -30,7 +31,7 @@
                 </th>
                 <td v-for="ic in columnCount" :key="'c'+ic+'r'+ir" class="cell" 
                     @click="setCurrentCell(ir,ic)" 
-                    :class="{'selected-cell':currentCell.row===ir && currentCell.column === ic}"
+                    :class="{ 'selected-cell': currentCell.row===ir && currentCell.column === ic, error: (cellValue(ir,ic)||'').match(/^#ERROR/)}"
                     v-html="cellDisplayValue(ir,ic)">
                     
                 </td>
@@ -41,14 +42,19 @@
 </template>
 
 <script>
+
 export default {
   data: function() {
       const uuid=this.$route.params.uuid;
+      let sheet;
       if (uuid && uuid!=="new") {
-          return this.$store.getters.sheetById(uuid);
+         sheet= this.$store.getters.sheetById(uuid);
       } else {
-          return this.$store.getters.newSheet();
+          sheet= this.$store.getters.newSheet();
       }
+      sheet.hasUnsavedChanges = false;
+      sheet.name=sheet.name||"";
+      return sheet;
   },
   methods: {
       rowLabel: function(rowIndex) {
@@ -97,6 +103,10 @@ export default {
               uuid: this.uuid,
               currentCellRange: this.currentCellRange
           });
+          this.hasUnsavedChanges = false;
+          if ((this.$route.params.uuid || "new") === "new") {
+              this.$router.replace("/sheets/"+this.uuid)
+          }
       }
   }, computed: {
       currentCell:  function () {
@@ -113,6 +123,7 @@ export default {
         },
         set: function (formula) {
             this.$set(this.gridFormulas, this.currentCell.label,formula);
+            this.hasUnsavedChanges = true;
         }
       },
       gridValues: function () {
@@ -192,6 +203,11 @@ export default {
 
     table {
         border-spacing: 0px;
+    }
+
+    .cell.error {
+        font-weight: bolder;
+        color: darkred;
     }
 
 </style>
